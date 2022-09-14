@@ -1,0 +1,30 @@
+{
+	"ActivitySummary":[
+		{
+			"summaryId" : "5001968356",
+			"activityId" : 5001968356,
+			"activityType": "RUNNING",
+			"startTimeInSeconds": 1452470400,
+			"startTimeOffsetInSeconds": 0,
+			"durationInSeconds": 11580,
+			"averageSpeedInMetersPerSecond": 2.888999938964844,
+			"distanceInMeters": 519818.125,
+			"activeKilocalories": 448,
+			"deviceName": "Forerunner 910XT",
+			"averagePaceInMinutesPerKilometer": 0.5975272352046997
+		},
+		{
+			"summaryId" : "5001968357",
+			"activityId" : 5001968356,
+			"activityType": "RUNNING",
+			"startTimeInSeconds": 1452470401,
+			"startTimeOffsetInSeconds": 0,
+			"durationInSeconds": 11580,
+			"averageSpeedInMetersPerSecond": 2.888999938964844,
+			"distanceInMeters": 519818.125,
+			"activeKilocalories": 448,
+			"deviceName": "Forerunner 910XT",
+			"averagePaceInMinutesPerKilometer": 0.5975272352046997
+		}
+	]
+}

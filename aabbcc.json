@@ -1,0 +1,12 @@
+{
+	"garmin_id" : 1,
+	"summary_id" : 1,
+	"activity_id" : 1,
+	"startTimeInSeconds" : "2022-05-20 00:00:01",
+	"startTimeOffsetInSeconds" : "2022-05-20 00:00:01",
+	"activityType" : "running",
+	"durationInSeconds" : 5000,
+	"steps" : 6000,
+	"manual" : 1,
+	"group_user_id" : 1
+}
