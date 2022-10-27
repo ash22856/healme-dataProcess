@@ -8,6 +8,8 @@ import boto3
 import foodrx as frx
 import lightbuzz as lbz
 import survey as sv
+import garmin as gm
+
 
 app = FastAPI()
 
@@ -149,23 +151,24 @@ async def updateData(session_id:int,group_user_id:int):
     elif session_id == '2':
         json_data = uts.readJSON("foodrx2.json")
 
-    frx.store_general_foodrx(obj,session_id,group_user_id,conn)
-    frx.storeSummary(json_data,session_id,group_user_id,conn)
-    frx.store_rdi_response(json_data,session_id,group_user_id,conn)
-    frx.store_rdi_images(json_data,session_id,group_user_id,conn)
-    frx.store_avg_plate_resp(json_data,session_id,group_user_id,conn)
-    frx.store_starPlot_resp(json_data,session_id,group_user_id,conn)
-    frx.store_beverage_freq_resp(json_data,session_id,group_user_id,conn)
-    frx.store_meal_resp(json_data,session_id,group_user_id,conn)
-    frx.store_foodrx_images(json_data,session_id,group_user_id,conn)
-    frx.store_foodrx_comments(json_data,session_id,group_user_id,conn)
-    frx.store_foodrx_statements(json_data,session_id,group_user_id,conn)
-    frx.store_foodrx_goals(json_data,session_id,group_user_id,conn)
-    frx.store_summ_statement(json_data,session_id,group_user_id,conn)
-    frx.store_clin_summ_statement(json_data,session_id,group_user_id,conn)
-    frx.store_gi_resp(json_data,session_id,group_user_id,conn)
-    frx.store_macro_value(json_data,session_id,group_user_id,conn)
-    frx.store_macro_freq(json_data,session_id,group_user_id,conn)
+    # frx.store_general_foodrx(obj,session_id,group_user_id,conn)
+    # frx.storeSummary(json_data,session_id,group_user_id,conn)
+    # frx.store_rdi_response(json_data,session_id,group_user_id,conn)
+    # frx.store_rdi_images(json_data,session_id,group_user_id,conn)
+    # frx.store_avg_plate_resp(json_data,session_id,group_user_id,conn)
+    # frx.store_starPlot_resp(json_data,session_id,group_user_id,conn)
+    # frx.store_beverage_freq_resp(json_data,session_id,group_user_id,conn)
+    # frx.store_meal_resp(json_data,session_id,group_user_id,conn)
+    # frx.store_foodrx_images(json_data,session_id,group_user_id,conn)
+    # frx.store_foodrx_comments(json_data,session_id,group_user_id,conn)
+    # frx.store_foodrx_statements(json_data,session_id,group_user_id,conn)
+    # frx.store_foodrx_goals(json_data,session_id,group_user_id,conn)
+    # frx.store_summ_statement(json_data,session_id,group_user_id,conn)
+    # frx.store_clin_summ_statement(json_data,session_id,group_user_id,conn)
+    # frx.store_gi_resp(json_data,session_id,group_user_id,conn)
+    # frx.store_macro_value(json_data,session_id,group_user_id,conn)
+    # frx.store_macro_freq(json_data,session_id,group_user_id,conn)
+    frx.store_meal_counts(json_data,session_id,group_user_id,conn)
 
     conn.commit()
     return {"Message": " FoodRX data updated for user with group_user_id "+str(group_user_id)}
@@ -177,49 +180,58 @@ async def updateGarmin(credentials:str):
     
     s3 = boto3.resource("s3")
     bucket_name = "acc-test-bucket-1"
-    healthKey = "garmin/" +credentials + "/" + credentials + "_healthSummary" + ".json"
-    activityKey = "garmin/" +credentials + "/" + credentials + "_activitySummary" + ".json"
+    healthKey = "garmin/" +credentials + "/" + credentials + "_healthSummary.json"
+    activityKey = "garmin/" +credentials + "/" + credentials + "_activitySummary.json"
+    sleepKey = "garmin/" + credentials +'/' +credentials + "_sleepSummary.json"
     generalKey = "garmin/" +credentials + "/" + credentials + ".json"
+    hrvKey = "garmin/" +credentials + "/" + credentials + "_hrvSummary.json"
 
     generalResponse = s3.Object(bucket_name,generalKey)
-    print("general done")
     healthResponse = s3.Object(bucket_name,healthKey)
     activityResponse = s3.Object(bucket_name,activityKey)
+    sleepResponse = s3.Object(bucket_name,sleepKey)
+    hrvResponse = s3.Object(bucket_name,hrvKey)
 
     generalObj = generalResponse.get()['Body'].read().decode('utf-8')
     healthObj = healthResponse.get()['Body'].read().decode('utf-8')
     activityObj = activityResponse.get()['Body'].read().decode('utf-8')
+    sleepObj = sleepResponse.get()['Body'].read().decode('utf-8')
+    hrvObj = hrvResponse.get()['Body'].read().decode('utf-8')
     
     generalObj = json.loads(generalObj)
     healthObj = json.loads(healthObj)['healthSummary']
     activityObj = json.loads(activityObj)['ActivitySummary']
-    
-    cur.execute('DELETE FROM garmin_step_data WHERE garmin_id = %s;',(generalObj["garmin_id"],))
-    cur.execute("INSERT INTO garmin_step_data VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);",
-    (generalObj["garmin_id"],generalObj["summary_id"],generalObj["activity_id"],generalObj["startTimeInSeconds"],
-    generalObj["startTimeOffsetInSeconds"],generalObj["activityType"],generalObj["durationInSeconds"],generalObj["steps"],generalObj["manual"],generalObj["group_user_id"]))
+    sleepObj = json.loads(sleepObj)['sleepSummary']
+    hrvObj = json.loads(hrvObj)['hrvSummary']
 
-    for item in healthObj:
-        print (item['summaryId'])
-        cur.execute('INSERT INTO garmin_health_summary VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);',
-        (item['summaryId'],item["calendarDate"],item["startTimeInSeconds"],item["startTimeOffsetInSeconds"],item["activityType"],item['durationInSeconds'],
-        item['steps'],item['distanceInMeters'],item['activeTimeInSeconds'],item['activeKilocalories'],item['bmrKilocalories'],
-        item['moderateIntensityDurationInSeconds'],item['vigorousIntensityDurationInSeconds'],item['floorsClimbed'],item['minHeartRateInBeatsPerMinute'],
-        item['averageHeartRateInBeatsPerMinute'],item['maxHeartRateInBeatsPerMinute'],item['restingHeartRateInBeatsPerMinute'],item['averageStressLevel'],
-        item['maxStressLevel'],item['stressDurationInSeconds'],item['restStressDurationInSeconds'],item['activityStressDurationInSeconds'],
-        item['lowStressDurationInSeconds'],item['mediumStressDurationInSeconds'],item['highStressDurationInSeconds'],item['stressQualifier'],
-        item['stepsGoal'],item['intensityDurationGoalInSeconds'],item['floorsClimbedGoal']))
+    # gm.store_general_garmin(generalObj,conn)
+    gm.store_health_summary(healthObj,conn)
+    # gm.store_activity_summary(activityObj,conn)
+    # gm.store_hrv_summary(hrvObj,conn)
+    # gm.store_sleep_summary(sleepObj,conn)
     
-    for item in activityObj:
-        print(item['summaryId'])
-        cur.execute('INSERT INTO garmin_activity_summary VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s);',
-        (item['summaryId'],item['activityId'],item['startTimeInSeconds'],
-        item['startTimeOffsetInSeconds'],item['activityType'],item['durationInSeconds'],
-        item['activeKilocalories'],item['deviceName'],item['distanceInMeters'],
-        ))
 
     conn.commit()
     return {"Message":"Garmin data stored for user with credentials "+ credentials}
+
+@app.post("/updateUserMocapSummary")
+async def updateMocap(user_id:int, session_id:int):
+    s3 = boto3.resource("s3")
+    bucket_name = "acc-test-bucket-1"
+    key = "light_buzz/" + str(user_id) + '/session' + str(session_id) + '.json'
+    response = s3.Object(bucket_name,key)
+    obj = response.get()['Body'].read().decode('utf-8')
+    obj = json.loads(obj)
+
+    lbz.store_mocap_sitToStand(obj,conn)
+    lbz.store_mocap_shoulderROM(obj,conn)
+    lbz.store_mocap_SLB(obj,conn)
+    lbz.store_mocap_gait(obj,conn)
+    lbz.store_mocap_step(obj,conn)
+    lbz.store_mocap_TUG(obj,conn)
+
+    conn.commit()
+    return {"Message": "MoCap data of session " + str(session_id) + " stored for user with user_id " + str(user_id)}
 
 
 @app.post("/randomMealSummary")

@@ -28,4 +28,49 @@ def store_lightbuzz_movements(data,user_id,conn):
         row.loc["FootRight(X)"],row.loc["FootRight(Y)"],row.loc["Pelvis(X)"],row.loc["Pelvis(Y)"],row.loc["Waist(X)"],row.loc["Waist(Y)"],
         row.loc["Chest(X)"],row.loc["Chest(Y)"],user_id))
 
+def store_mocap_sitToStand(data,conn):
+    cur = conn.cursor()
+    subData = data['sitToStand']
+    cur.execute('INSERT INTO mocap_sittostand VALUES (%s,%s,%s,%s,%s,%s,%s);',
+    (subData['user_id'],subData['session_id'],subData['total_repetition'],subData['average_seated_knee_angle'],
+    subData['rests'],subData['flagged_for_review'],subData['video']))
+
+def store_mocap_shoulderROM(data,conn):
+    cur = conn.cursor()
+    subData = data['shoulderROM']
+    cur.execute('INSERT INTO mocap_shoulderrom VALUES (%s,%s,%s,%s,%s);',
+    (subData['user_id'],subData['session_id'],subData['shoulder_flexion'],
+    subData['flagged_for_review'],subData['video']))
+
+def store_mocap_SLB(data,conn):
+    cur = conn.cursor()
+    subData = data['SLB']
+    cur.execute('INSERT INTO mocap_slb VALUES (%s,%s,%s,%s,%s,%s,%s,%s);',
+    (subData['user_id'],subData['session_id'],subData['total_time_balanced'],
+    subData['sway_in_hips'],subData['sway_in_shoulders'],subData['rotation_of_spine'],
+    subData['lean'],subData['video']))
+
+def store_mocap_gait(data,conn):
+    cur = conn.cursor()
+    subData = data['gait']
+    cur.execute('INSERT INTO mocap_gait VALUES (%s,%s,%s,%s,%s,%s);',
+    (subData['user_id'],subData['session_id'],subData['time'],
+    subData['average'],subData['flagged_for_review'],subData['video']))
+
+def store_mocap_step(data,conn):
+    cur = conn.cursor()
+    subData = data['step']
+    cur.execute('INSERT INTO mocap_step VALUES (%s,%s,%s,%s,%s,%s);',
+    (subData['user_id'],subData['session_id'],subData['repetitions'],
+    subData['failed_repetitions'],subData['steps'],subData['rests']))
+
+def store_mocap_TUG(data,conn):
+    cur = conn.cursor()
+    subData = data['TUG']
+    cur.execute('INSERT INTO mocap_tug VALUES (%s,%s,%s,%s);',
+    (subData['user_id'],subData['session_id'],
+    subData['total_time'],subData['gait_used']))
+
+
+
     
