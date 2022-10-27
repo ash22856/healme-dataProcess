@@ -1,0 +1,51 @@
+{
+	"sitToStand":{
+		"user_id" : 18,
+		"session_id" : 2,
+		"total_repetition" : 10,
+		"average_seated_knee_angle" : 90,
+		"rests" : 5,
+		"flagged_for_review" : "valgus knees",
+		"video" : "www.bobLarrysitToStandSession1.com"
+	},
+	"shoulderROM":{
+		"user_id" : 18,
+		"session_id" : 2,
+		"shoulder_flexion" : 128,
+		"flagged_for_review" : "poor start posture",
+		"video" : "www.bobLarryshoulderRomSession1.com"
+	},
+	"SLB":{
+		"user_id" : 18,
+		"session_id" : 2,
+		"total_time_balanced" : 48,
+		"sway_in_hips": 130,
+		"sway_in_shoulders": 98,
+		"rotation_of_spine" :20,
+		"lean" : 38,
+		"video" : "www.bobLarrySLBSession1.com"
+	},
+	"gait":{
+		"user_id" : 18,
+		"session_id" : 2,
+		"time" : 31,
+		"average" : 1.8,
+		"flagged_for_review":"total time exceeds 5 seconds",
+		"video" : "www.bobLarryGaitSession1.com"
+	},
+	"step":{
+		"user_id" : 18,
+		"session_id" : 2,
+		"repetitions" : 78,
+		"failed_repetitions" : 8,
+		"steps" : 23,
+		"rests" : 5
+	},
+	"TUG":{
+		"user_id" : 18,
+		"session_id" : 2,
+		"total_time" : 18,
+		"gait_used":false
+	}
+
+}

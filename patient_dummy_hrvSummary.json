@@ -1,0 +1,51 @@
+{
+	"hrvSummary": [
+		{
+			"summaryId": "37",
+			"calendarDate": "2016-10-01",
+			"lastNightAvg": 44,
+			"lastNight5MinHigh": 72,
+			"startTimeOffsetInSeconds": -18000,
+			"durationInSeconds": 3820,
+			"startTimeInSeconds": 1653976004,
+			"hrvValues": {
+				"300": 32,
+				"600": 24,
+				"900": 31,
+				"1200": 35,
+				"1500": 39,
+				"1800": 47,
+				"2100": 32,
+				"2400": 24,
+				"2700": 31,
+				"3000": 35,
+				"3300": 39,
+				"3600": 47
+			}
+		},
+		{
+			"summaryId": "37",
+			"calendarDate": "2016-10-02",
+			"lastNightAvg": 47,
+			"lastNight5MinHigh": 75,
+			"startTimeOffsetInSeconds": -18000,
+			"durationInSeconds": 3820,
+			"startTimeInSeconds": 1653976004,
+			"hrvValues": {
+				"300": 35,
+				"600": 22,
+				"900": 28,
+				"1200": 30,
+				"1500": 35,
+				"1800": 40,
+				"2100": 39,
+				"2400": 27,
+				"2700": 36,
+				"3000": 33,
+				"3300": 39,
+				"3600": 46
+			}
+		}
+	]
+
+}

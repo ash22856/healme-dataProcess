@@ -414,6 +414,18 @@ def store_macro_freq(data,session_id,group_user_id,conn):
 
     cur.execute(query,params)
 
+def store_meal_counts(data,session_id,group_user_id,conn):
+    cur = conn.cursor()
+    breakfast_count = data['current']['meal_frequency_response']['meals_per_day']['breakfast']
+    lunch_count = data['current']['meal_frequency_response']['meals_per_day']['lunch']
+    dinner_count = data['current']['meal_frequency_response']['meals_per_day']['dinner']
+    snack_count = data['current']['meal_frequency_response']['meals_per_day']['snack']
+
+    query = "INSERT INTO foodrx_meals_count VALUES (%s,%s,%s,%s,%s,%s);"
+    params = (session_id,breakfast_count,lunch_count,dinner_count,snack_count,group_user_id)
+    cur.execute(query,params)
+
+
 
 def select_random_dates(data):
     date_since = data["current"]["date_since"]
